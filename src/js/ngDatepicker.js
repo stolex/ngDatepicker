@@ -17,6 +17,9 @@ angular.module('jkuri.datepicker', [])
 		scope: {},
 		link: function (scope, element, attrs, ngModel) {
 			setScopeValues(scope, attrs);
+			if (element){
+				scope.rootElement = element.get(0);
+			};
 
 			scope.calendarOpened = false;
 			scope.days = [];
@@ -113,17 +116,25 @@ angular.module('jkuri.datepicker', [])
 				if (!e.target) return;
 
 				for (element = e.target; element; element = element.parentNode) {
-					var id = element.id;
-					var classNames = element.className;
+					var id;
+					var classNames;
 
-					if (id !== undefined) {
-						for (i = 0; i < classList.length; i += 1) {
-							if (id.indexOf(classList[i]) > -1 || classNames.indexOf(classList[i]) > -1) {
-								return;
+					if (scope.rootElement){
+						if (scope.rootElement === element){
+							return;
+						};
+					}else{
+						id = element.id;
+						classNames = element.className;
+						if (id !== undefined) {
+							for (i = 0; i < classList.length; i += 1) {
+								if (id.indexOf(classList[i]) > -1 || classNames.indexOf(classList[i]) > -1) {
+									return;
+								}
 							}
 						}
-					}
-				}
+					};
+				};
 
 				scope.closeCalendar();
 				scope.$apply();
